@@ -1,5 +1,11 @@
 if (Meteor.isServer) {
 
+
+// Get the region
+var info = HTTP.get("http://ipinfo.io", function (error, result) {
+  console.log(result.content);
+});
+
 // New users receive a verification email
 Accounts.config({'sendVerificationEmail': true});
 
@@ -50,14 +56,26 @@ SearchSource.defineSource('listings', function (searchText, options) {
   return user;
 });
 
-  if (!ServiceConfiguration.configurations.find()) { 
+  // Removes the config b/c dupliation error and re-defines it 
+
+    ServiceConfiguration.configurations.remove({
+      service: "facebook"
+    });
+
     ServiceConfiguration.configurations.insert({
       service: 'facebook',
       appId: '403772073107923',
       secret: '4663665d518fef59dbf6643280281a85'
     });
+    // if (!ServiceConfiguration.configurations.find()) { 
+    //     ServiceConfiguration.configurations.insert({
+    //     service: 'facebook',
+    //     appId: '403772073107923',
+    //     secret: '4663665d518fef59dbf6643280281a85'
+    // });
 
-  }
+    // }
+
 
 //           //
 // Amazon S3 //
